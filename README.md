@@ -1,6 +1,10 @@
-# cpp-cmake-template
+# cpp-stdlib-example
 
 ## About
+
+Code Samples of the C++ Standard Library for myself.
+
+## About template
 
 A template for C++ projects using CMake.
 This repository includes settings for the following tools:
