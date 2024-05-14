@@ -19,6 +19,7 @@ include(${CMAKE_SCRIPTS_DIR}/set_compile_props.cmake)
 include(${CMAKE_SCRIPTS_DIR}/set_warnings_as_errors.cmake)
 include(${CMAKE_SCRIPTS_DIR}/enable_memcheck.cmake)
 include(${CMAKE_SCRIPTS_DIR}/enable_sanitizers.cmake)
+include(${CMAKE_SCRIPTS_DIR}/install_gtest.cmake)
 
 # set default install path (can be overwritten with -DCMAKE_INSTALL_PREFIX=...)
 set(CMAKE_INSTALL_PREFIX
@@ -34,7 +35,6 @@ if(OPTION_ENABLE_SANITIZERS)
 endif()
 
 add_subdirectory(src)
-add_subdirectory(test)
 
 # I refered the following projecst and articles to make cmake scripts.
 # https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
