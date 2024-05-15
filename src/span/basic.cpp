@@ -7,6 +7,7 @@
 
 namespace spantest {
 
+// Reference: https://cpprefjp.github.io/reference/span/span.html
 // メモリ連続性をもつあらゆる範囲を出力する関数。
 // std::spanオブジェクトはコピーで受け取るのが基本的な使い方
 template <class T, std::size_t Extent> void print(std::span<T, Extent> s) {

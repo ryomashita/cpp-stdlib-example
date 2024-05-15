@@ -1,5 +1,12 @@
 add_subdirectory(add)
 
-add_executable(span span/basic.cpp)
-set_normal_compile_options(span)
-enable_gtest(span)
+function(build_directory target dirpath)
+    file(GLOB_RECURSE SRC_LIST "${dirpath}/*.cpp")
+    add_executable(${target} ${SRC_LIST})
+    set_normal_compile_options(${target})
+    set_warnings_as_errors(${target})
+    enable_gtest(${target})
+endfunction()
+
+# targets
+build_directory(span span)
