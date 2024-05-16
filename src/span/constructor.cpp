@@ -3,25 +3,29 @@
 
 namespace spantest {
 
+// std::span (C++20~) Constructor
+// Reference: https://cpprefjp.github.io/reference/span/span/op_constructor.html
+
 TEST(SpanTest, ctor) {
   std::vector<int> v = {1, 2, 3, 4, 5};
 
   // (1) デフォルトコンストラクタ
+  // span()
   {
-    // 長さ0の参照範囲をもつspanオブジェクト
+    // 長さ0の参照範囲 をもつspanオブジェクト
     std::span<int, 0> s1;
     assert(s1.empty());
 
-    // 動的な要素数をもつspanオブジェクト
+    // 動的な要素数 をもつspanオブジェクト
     std::span<int> s2;
     assert(s2.empty());
 
-    // 以下はコンパイルエラーになる。
     // 長さ1以上のspanは、参照範囲を設定しなければならない
-    // std::span<int, 1> s3{};
+    // std::span<int, 1> s3{}; // コンパイルエラー
   }
 
   // (2) イテレータと要素数の組を指定
+  // span(It first, size_type count)
   {
     // vの先頭3要素を参照する。
     std::span<int> s{v.begin(), 3};
@@ -32,6 +36,7 @@ TEST(SpanTest, ctor) {
   }
 
   // (3) 範囲を指定
+  // span(It first, End last)
   {
     std::span<int> s{v.begin(), v.begin() + 3};
     assert(s.size() == 3);
@@ -41,6 +46,7 @@ TEST(SpanTest, ctor) {
   }
 
   // (4) 組み込み配列への参照を指定
+  // span(type_identity_t<element_type> (&arr)[N])
   {
     int ar[] = {1, 2, 3, 4, 5};
     std::span<int> s{ar};
@@ -49,6 +55,7 @@ TEST(SpanTest, ctor) {
   }
 
   // (5) std::arrayオブジェクトへの参照を指定
+  // span(array<T, N> &arr)
   {
     std::array ar = {1, 2, 3, 4, 5};
     std::span<int> s{ar};
@@ -57,6 +64,7 @@ TEST(SpanTest, ctor) {
   }
 
   // (6) const std::arrayオブジェクトへの参照を指定
+  // span(const array<T, N> &arr)
   {
     std::array ar = {1, 2, 3, 4, 5};
     const auto &car = ar;
@@ -67,6 +75,7 @@ TEST(SpanTest, ctor) {
   }
 
   // (7) メモリの連続性をもつイテレータをもつオブジェクトの要素全体を参照させる
+  // span(R&& r)
   {
     std::span<int> s1{v};
     assert(s1.size() == v.size());
@@ -80,6 +89,7 @@ TEST(SpanTest, ctor) {
   }
 
   // (8) コピーコンストラクタ
+  // span(const span &other)
   {
     std::span<int> s1{v};
     std::span<int> s2 = s1;
@@ -90,16 +100,19 @@ TEST(SpanTest, ctor) {
   }
 
   // (9) 変換コンストラクタ
+  // span(const span<OtherElementType, OtherExtent>& s)
   {
     int ar[] = {1, 2, 3};
 
     std::span<int, 3> s1{ar};
-    std::span<int> s2 = s1;
-    std::span<int> s3 = s2.first(2);
-    std::span<const int> s4 = s3;
+    std::span<int> s2 = s1;          // span<T, N> -> span<T> への変換
+    std::span<int> s3 = s2.first(2); // span<T> -> span<T> への変換
+    std::span<const int> s4 = s3;    // T -> const T への変換
+    std::span<const int32_t> s5 = s4;
+    // T -> U への変換（暗黙の型変換が可能 && sizeof(U) == sizeof(T)）
 
-    assert(s4.size() == 2);
-    assert(s4.data() == ar);
+    assert(s5.size() == 2);
+    assert(s5.data() == ar);
   }
 }
 
