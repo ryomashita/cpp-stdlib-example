@@ -109,7 +109,7 @@ TEST(SpanTest, ctor) {
     std::span<int> s3 = s2.first(2); // span<T> -> span<T> への変換
     std::span<const int> s4 = s3;    // T -> const T への変換
     std::span<const int32_t> s5 = s4;
-    // T -> U への変換（暗黙の型変換が可能 && sizeof(U) == sizeof(T)）
+    // T -> U への変換（std::convertible_to<T, U> && sizeof(U) == sizeof(T)）
 
     assert(s5.size() == 2);
     assert(s5.data() == ar);
