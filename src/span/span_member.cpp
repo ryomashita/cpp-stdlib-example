@@ -31,17 +31,18 @@ TEST(SpanTest, SubSequence) {
 TEST(SpanTest, Size) {
   std::vector<int> v = {1, 2, 3, 4, 5};
 
-  // size() const noexcept; 要素数を取得する
+  // constexpr size_type size() const noexcept; 要素数を取得する
   assert(std::span{v}.size() == v.size());
   assert(std::span{v}.first(3).size() == 3);
 
-  // size_bytes() const noexcept; バイト数を取得する
+  // constexpr size_type size_bytes() const noexcept; バイト数を取得する
   // [NOTE] std::span の対象はメモリの連続性を持つシーケンスであるため、
   // 常に sizeof(T) * size() と等価
   assert(std::span{v}.size_bytes() == v.size() * sizeof(int));
   assert(std::span{v}.first(3).size_bytes() == 3 * sizeof(int));
 
-  // bool empty() const noexcept; 空かどうかを判定する
+  // [[nodiscard]] constexpr bool empty() const noexcept;
+  // シーケンスが空かどうか判定する
   assert(std::span{v}.empty() == false);
   assert(std::span<int>{}.empty());
   assert((std::span<int>{v.data(), 0}.empty()));
