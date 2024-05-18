@@ -31,7 +31,7 @@ function(set_normal_compile_options target)
               -U_FORTIFY_SOURCE
               -D_FORTIFY_SOURCE=3
               -D_GLIBCXX_ASSERTIONS
-              -fstrict-flex-arrays=3 # from GCC 13 & Clang 16.0.0
+              # -fstrict-flex-arrays=3 # from GCC 13 & Clang 16.0.0
               -fstack-clash-protection
               -fstack-protector-strong)
 

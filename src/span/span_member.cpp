@@ -47,4 +47,43 @@ TEST(SpanTest, Size) {
   assert(std::span<int>{}.empty());
   assert((std::span<int>{v.data(), 0}.empty()));
 }
+
+TEST(SpanTest, Accessor) {
+  std::vector<int> v = {1, 2, 3, 4, 5};
+
+  // constexpr reference operator[](size_type i) const;
+  {
+    int &x = std::span{v}[2];
+    assert(x == 3);
+    int &y = std::span{v}.subspan(2, 3)[1];
+    assert(y == 4);
+  }
+
+  // (C++26~) constexpr reference at(size_type i) const;
+
+  // constexpr reference front() const;
+  {
+    int &x = std::span{v}.front();
+    assert(x == 1);
+    int &y = std::span{v}.subspan(2, 3).front();
+    assert(y == 3);
+  }
+
+  // constexpr reference back() const;
+  {
+    int &x = std::span{v}.back();
+    assert(x == 5);
+    int &y = std::span{v}.subspan(2, 3).back();
+    assert(y == 5);
+  }
+
+  // constexpr pointer data() const noexcept;
+  {
+    int *p1 = std::span{v}.data();
+    assert(p1 == &v[0]);
+    int *p2 = std::span{v}.subspan(2, 3).data();
+    assert(p2 == &v[2]);
+  }
+}
+
 } // namespace spantest
