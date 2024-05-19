@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+#include <numeric>
 #include <span>
+#include <string>
 
 namespace spantest {
 
@@ -83,6 +85,57 @@ TEST(SpanTest, Accessor) {
     assert(p1 == &v[0]);
     int *p2 = std::span{v}.subspan(2, 3).data();
     assert(p2 == &v[2]);
+  }
+}
+
+TEST(SpanTest, Iterator) {
+  std::vector<std::string> v = {"1", "2", "3", "4", "5"};
+  std::span<std::string> s = std::span(v).first(3);
+
+  // std::span::begin && std::span::end
+  // constexpr iterator begin() const noexcept; // begin (1)
+  // friend constexpr iterator begin(span s) noexcept; // begin (2) ADL
+  // constexpr iterator end() const noexcept;        // end (1)
+  // friend constexpr iterator end(span s) noexcept; // end (2) ADL
+  {
+    // (1)
+    std::string x = std::accumulate(s.begin(), s.end(), std::string{});
+    assert(x == "123");
+
+    // (2) 名前空間修飾なしで、ADLで呼び出す
+    std::string y = std::accumulate(begin(s), end(s), std::string{});
+    assert(y == "123");
+
+    // std::begin()/std::end (<iterator>) call s.begin()/s.end()
+    std::string z = std::accumulate(std::begin(s), std::end(s), std::string{});
+    assert(z == "123");
+
+    // (2) 範囲for文は、ADLでbegin()/end()を探索する
+    std::string accum{};
+    for (const auto &i : s) {
+      accum += i;
+    }
+    assert(accum == "123");
+  }
+
+  // std::span::rbegin && std::span::rend
+  // constexpr reverse_iterator rbegin() const noexcept; // rbegin (1)
+  // friend constexpr reverse_iterator rbegin(span s) noexcept; // rbegin (2)
+  // ADL constexpr reverse_iterator rend() const noexcept;        // rend (1)
+  // friend constexpr reverse_iterator rend(span s) noexcept; // rend (2) ADL
+  {
+    // (1)
+    std::string x = std::accumulate(s.rbegin(), s.rend(), std::string{});
+    assert(x == "321");
+
+    // (2) 名前空間修飾なしで、ADLで呼び出す
+    std::string y = std::accumulate(rbegin(s), rend(s), std::string{});
+    assert(y == "321");
+
+    // std::rbegin()/std::rend (<iterator>) call s.rbegin()/s.rend()
+    std::string z =
+        std::accumulate(std::rbegin(s), std::rend(s), std::string{});
+    assert(z == "321");
   }
 }
 
