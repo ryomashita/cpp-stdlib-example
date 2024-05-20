@@ -10,3 +10,4 @@ endfunction()
 
 # targets
 build_directory(span span)
+build_directory(ranges ranges)
