@@ -40,6 +40,7 @@ TEST(RangeTest, RangeFactory) {
   // などより汎用的な方法を使う必要がある。
   {
     // iota_view{} か views::iota() で生成
+    // [0, 10), つまり 0, 1, 2, ..., 9 が生成される。
     constexpr auto x = std::views::iota(0, 10);
     constexpr decltype(x) sub{x.begin() + 3, x.end()};
     static_assert(sub.front() == 3);
