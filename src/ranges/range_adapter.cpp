@@ -146,4 +146,30 @@ TEST(RangeTest, RangeAdapter) {
     // 5, 4, 3, 2, 1
     EXPECT_EQ(std::accumulate(r.begin(), r.end(), 0), 15);
   }
+
+  // std::views::keys , std::views::values
+  // タプルとみなせる型を要素とする Range に、 get<N> を適用する view
+  {
+    std::map<int, std::string> m{{1, "Alice"}, {2, "Bob"}, {3, "Charlie"}};
+    auto r = m | std::views::keys;
+    EXPECT_EQ(std::accumulate(r.begin(), r.end(), 0), 6);
+
+    auto r2 = m | std::views::values;
+    EXPECT_EQ(std::accumulate(r2.begin(), r2.end(), std::string{}),
+              "AliceBobCharlie");
+  }
+
+  // 以下は C++23 で追加される Range アダプタ
+  // views::as_rvalue : 要素を rvalue に変換する
+  // views::join_with : ネストされた Range を平坦にしつつ、デリミタを挿入する
+  // views::as_const : 要素を const に変換する
+  // views::enumerate : 要素を インデックス付きのタプルに変換する
+  // views::zip : 複数の Range をまとめてタプルに変換する
+  // views::zip_transform : zip しつつ、タプルを変換する
+  // views::adjacent : 隣接する要素N個をまとめたタプルに変換する
+  // views::adjacent_transform : adjacent しつつ、タプルを変換する
+  // views::chunk : N個ずつ要素をまとめた Range を生成する
+  // views::slide : N個ずつ要素をまとめる窓をスライドさせた Range を生成する
+  // views::stride : N個ごとに要素を飛ばしながら取り出す Range を生成する
+  // views::cartesian_product : 複数の Range の直積を生成する
 }
